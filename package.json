@@ -24,7 +24,9 @@
   },
   "homepage": "https://github.com/gordon2012/boilerplate-fcc-microservice#readme",
   "dependencies": {
+    "babel-polyfill": "^6.26.0",
     "babel-preset-react": "^6.24.1",
+    "body-parser": "^1.18.3",
     "cors": "^2.8.5",
     "express": "^4.16.4",
     "react": "^16.6.3",

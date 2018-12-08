@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import bodyParser from 'body-parser';
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 
@@ -9,6 +10,8 @@ const app = express();
 
 app.use(cors({ optionSuccessStatus: 200 }));
 app.use(express.static('.build/public'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', function(req, res) {
   const script =
@@ -40,7 +43,11 @@ app.get('/', function(req, res) {
 app.get('/api/:input?', function(req, res) {
   const { input } = req.params;
 
-  res.json({ ...(input ? { input } : {}), end: 'back' });
+  res.json({ method: 'get', ...(input ? { input } : {}) });
+});
+
+app.post('/api/post', (req, res) => {
+  res.json({ method: 'post', ...(req.body ? req.body : {}) });
 });
 
 export default app;

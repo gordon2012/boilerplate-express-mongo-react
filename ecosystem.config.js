@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: 'boilerplate-fcc-microservice',
+      name: 'boilerplate-express-mongo-react',
       script: './.build/server.js',
       instances: 1,
       autorestart: true,
