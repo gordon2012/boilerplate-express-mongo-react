@@ -1,10 +1,16 @@
+import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 
+import connect from './connect';
+import Foobar from './models/foobar';
 import App from '../common/App';
+
+dotenv.config();
+const db = process.env.DB || 'test';
 
 const app = express();
 
@@ -12,6 +18,8 @@ app.use(cors({ optionSuccessStatus: 200 }));
 app.use(express.static('.build/public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+connect(`mongodb://localhost:27017/${db}`);
 
 app.get('/', function(req, res) {
   const script =
@@ -46,8 +54,13 @@ app.get('/api/:input?', function(req, res) {
   res.json({ method: 'get', ...(input ? { input } : {}) });
 });
 
-app.post('/api/post', (req, res) => {
-  res.json({ method: 'post', ...(req.body ? req.body : {}) });
+app.post('/api/post', async (req, res) => {
+  try {
+    const doc = await Foobar.create(req.body);
+    res.json(doc);
+  } catch (e) {
+    console.error(e);
+  }
 });
 
 export default app;
